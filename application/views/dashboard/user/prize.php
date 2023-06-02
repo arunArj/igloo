@@ -7,6 +7,31 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <link href="<?php echo base_url();?>assets/frontend/dashboard/css/style.css" rel="stylesheet">
 <title>Igloo Quanta - Consumer Promotion 2023</title>
+<style>
+    /* Custom styles for the popup */
+    #confirmationPopup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 300px;
+        padding: 20px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        text-align: center;
+    }
+
+    #confirmationPopup h2 {
+        margin-top: 0;
+    }
+
+    #confirmationPopup button {
+        margin-top: 10px;
+    }
+</style>
 </head>
 
 <body>
@@ -71,7 +96,7 @@
                     <div class="card bgred">
                         <div class="card-body">
                             <img src="<?php echo base_url();?>assets/frontend/dashboard/images/point-5000.png" alt="" class="img-fluid">
-                            <a href="<?php echo base_url() ?>dashboard/redeemPrize?prize=iphone"><button class="btn btnsubmit-red">Redeem Prize</button></a>
+                            <a class="redirectBtn" href="<?php echo base_url() ?>dashboard/redeemPrize?prize=iphone"><button class="btn btnsubmit-red">Redeem Prize</button></a>
                         </div>
                     </div>
                 </div>
@@ -79,7 +104,7 @@
                     <div class="card bgred">
                         <div class="card-body">
                             <img src="<?php echo base_url();?>assets/frontend/dashboard/images/point-2000.png" alt="" class="img-fluid">
-                    <a href="<?php echo base_url() ?>dashboard/redeemPrize?prize=playstation"><button class="btn btnsubmit-red">Redeem Prize</button></a>
+                    <a class="redirectBtn" href="<?php echo base_url() ?>dashboard/redeemPrize?prize=playstation"><button class="btn btnsubmit-red">Redeem Prize</button></a>
                         </div>
                     </div>
                 </div>
@@ -87,7 +112,7 @@
                     <div class="card bgred">
                         <div class="card-body">
                             <img src="<?php echo base_url();?>assets/frontend/dashboard/images/point-1000.png" alt="" class="img-fluid">
-                              <a href="<?php echo base_url() ?>dashboard/redeemPrize?prize=airpods"><button class="btn btnsubmit-red" id="redirectBtn">Redeem Prize</button></a>
+                              <a class="redirectBtn" href="<?php echo base_url() ?>dashboard/redeemPrize?prize=airpods"><button class="btn btnsubmit-red" id="redirectBtn">Redeem Prize</button></a>
                         </div>
                     </div>
                 </div>
@@ -132,6 +157,12 @@
              </div>
     </div>
 </div>
+<div id="confirmationPopup">
+    <h2>Confirmation</h2>
+    <p>Are you sure you want to redirect?</p>
+    <button id="confirmRedirectBtn">Yes</button>
+    <button id="cancelRedirectBtn">No</button>
+</div>
 <script type="text/javascript" src="<?php echo base_url();?>assets/frontend/dashboard/js/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script>
@@ -144,15 +175,43 @@
     });
 </script>
 <script>
-    $(document).ready(function() {
-        $('#redirectBtn').click(function(e) {
-            e.preventDefault(); // Prevent the default redirect behavior
+    // $(document).ready(function() {
+    //     $('.redirectBtn').click(function(e) {
+    //         e.preventDefault(); // Prevent the default redirect behavior
 
-            // Display the confirmation popup
-            if (confirm("Are you sure you want to redirect?")) {
-                // If user clicks 'OK' in the confirmation popup, perform the redirect
-                window.location.href = "your-redirect-url";
-            }
+    //         // Display the confirmation popup
+    //         if (confirm("Are you sure you want to redirect?")) {
+    //             // If user clicks 'OK' in the confirmation popup, perform the redirect
+    //           var href = $(this).attr('href');
+    //           //alert(href);
+    //           window.location.href = href;
+    //         }
+    //         else
+    //         {
+    //             return false;
+    //         }
+    //     });
+    // });
+    $(function() {
+        var href ="";
+        $('.redirectBtn').click(function(e) {
+           
+            e.preventDefault(); // Prevent the default redirect behavior
+             href = $(this).attr('href');
+            // Show the confirmation popup
+            $('#confirmationPopup').fadeIn();
+        });
+
+        $('#confirmRedirectBtn').click(function() {
+            
+            var href2 = event.href2;
+            // Perform the redirect
+            window.location.href = href;
+        });
+
+        $('#cancelRedirectBtn').click(function() {
+            // Hide the confirmation popup
+            $('#confirmationPopup').fadeOut();
         });
     });
 </script>

@@ -1,18 +1,5 @@
-
-<style>
-    .table-wrap{
-        background-color: #F6F1F1;
-    }
-     .table-wrap th {
-         text-align:center;
-     }
-     .main-sidebar{
-         background-color:#146C94;
-     }
-     .skin-blue .sidebar-menu>li.active>a{
-         background-color:#3C84AB;
-     }
-</style>
+<div class="content-right">
+    <div class="container-fluid">
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -116,7 +103,9 @@
     </section>
 
     <!-- /.content -->
-  </div>
+        </div>
+    </div>
+</div>
   <!-- /.content-wrapper -->
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>

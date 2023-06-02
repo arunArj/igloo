@@ -1,41 +1,7 @@
-
-<style>
-    .table-wrap{
-        background-color: #F6F1F1;
-    }
-     .table-wrap th {
-         text-align:center;
-     }
-     .main-sidebar{
-         background-color:#146C94;
-     }
-     .skin-blue .sidebar-menu>li.active>a{
-         background-color:#3C84AB;
-     }
-</style>
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Dashboard
-        <small>Control panel</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
-      </ol>
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-      <!-- Small boxes (Stat box) -->
-      <section class="content-header">
-        <h4>
-          Iqloo Quanta
-        </h4>
-        
-      </section>
+  
+  
+<div class="content-right">
+    <div class="container-fluid">
       <div class="row">
           <div class="col-lg-3 col-xs-3">
             <!-- small box -->
@@ -146,9 +112,12 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
+ </div>
+
 
   <script type="text/javascript">
     $(document).ready(function() {
       $("#dashboardMainMenu").addClass('active');
     }); 
   </script>
+  

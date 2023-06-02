@@ -47,11 +47,9 @@ class Admin_Controller extends MY_Controller
 	public function render_template($page = null, $data = array())
 	{
 
-		$this->load->view('templates/header',$data);
-		$this->load->view('templates/header_menu',$data);
-		$this->load->view('templates/side_menubar',$data);
+		$this->load->view('templates/header_admin',$data);
 		$this->load->view($page, $data);
-		$this->load->view('templates/footer',$data);
+		$this->load->view('templates/footer_admin',$data);
 	}
 
 	public function company_currency()
