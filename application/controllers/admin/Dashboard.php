@@ -50,7 +50,10 @@ class Dashboard extends Admin_Controller
 	}
 	public function winnersList(){
 	    $data['page_title'] = 'Admin Dashbaord';
-	    $data['winners'] = $this->model_winner->getAllWinners();
+	    $item =  $this->input->get('item');
+	    $data['winners'] = $this->model_winner->getAllWinnersByItem($item);
+	   // echo $this->db->last_query();
+	   // exit;
 	    $this->render_template('dashboard/admin/winners',$data);
 	}
 }

@@ -93,8 +93,8 @@
                               
                         <?php }
                         else { ?>
-                            <div class="winnerdetails">
-                                      <div>No record..</div>
+                            <div>
+                                      <div><b>To be Announced soon</b></div>
                             </div>
                         <?php } ?>
                       </div>

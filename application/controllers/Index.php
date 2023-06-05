@@ -11,10 +11,16 @@ class Index extends CI_Controller {
         $this->load->library('SendMail');
         $this->load->helper('string');
         $this->load->model(['model_common','model_ip_block','model_winner']);	
-    
+    	$this->load->helper('security');
 	}
 	public function index()
 	{
+	    
+	   $this->load->view('frontend/country');
+	}
+	public function home()
+	{
+	    
 	   $this->load->view('frontend/home');
 	}
 	public function registration()
@@ -69,7 +75,7 @@ class Index extends CI_Controller {
 		$this->form_validation->set_rules('phone', 'Mobile Number', 'trim|required');
         $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|is_unique[consumer_record.email]',array(
                 'required'      => 'You have not provided %s.',
-                'is_unique'     => 'This %s already have an account'
+                'is_unique'     => 'It appears that you are already a registered user. Kindly proceed to log in and update your points.'
         ));
         
        
@@ -107,13 +113,13 @@ class Index extends CI_Controller {
                 'device' => $agent,
             );
             
-            
+            $data = $this->security->xss_clean($data); 
             $this->session->set_userdata($data);
             
             //generate and sent otp
             $six_digit_random_number = random_int(100000, 999999);
             $otpData = array(
-                'email' => $this->input->post('email'),
+                'email' => $data['email'],
                 'otp' => $six_digit_random_number,
                 'time'    => $now
             );
@@ -125,13 +131,8 @@ class Index extends CI_Controller {
             //redirect on success
             if($emailStatus == TRUE)
             {
-                if($language == 'en')
-                {
-                    redirect('index/otp', 'refresh');
-                }
-                else{
-                    redirect('index/otp', 'refresh');
-                }
+                redirect('index/otp', 'refresh');
+
             }
             else
             {
@@ -157,14 +158,14 @@ class Index extends CI_Controller {
             $otp = $this->input->post('otp');
             $email = $this->session->userdata('email');
             $name = $this->session->userdata('name');
-            
-            $otp_confirmation = $this->model_common->getOtp($email);
+            $inputArr= $this->security->xss_clean(array('otp'=>$otp,'email'=>$email,'name'=>$name));
+            $otp_confirmation = $this->model_common->getOtp( $inputArr['email']);
             if(!$otp_confirmation){
                 $this->session->set_flashdata('error', 'Otp is invalid or expired try using new otp');
                 redirect('index/otp', 'refresh');
                 exit;
             }
-            if($otp == $otp_confirmation->otp){
+            if( $inputArr['otp'] == $otp_confirmation->otp){
                 // Set the current time
                 $current_time = new DateTime();
                 
@@ -250,7 +251,7 @@ class Index extends CI_Controller {
                 $this->db->trans_commit();
                 return true;
         }
-         return true;
+        
     }
     
     public function thankyou()
@@ -273,7 +274,7 @@ class Index extends CI_Controller {
     {             
 
         $code = $this->input->post('code');
-        
+        $code = $this->security->xss_clean($code);
         $response = array(
             'csrfName' => $this->security->get_csrf_token_name(),
             'csrfHash' => $this->security->get_csrf_hash()
@@ -331,16 +332,13 @@ class Index extends CI_Controller {
     {
         
         $data['winner'] = $this->model_winner->getAllWinners();
-        // echo "<pre>";
-        // echo $this->db->last_query();
-        // print_r($data['winner']);
-        // exit();
         $this->load->view('frontend/winners',$data);
     }
 /*********************IP blocking section************************* */
     
     private function block_ip($ip)
-    {    
+    {   
+        $ip= $this->security->xss_clean($ip);
         date_default_timezone_set('Asia/Kolkata'); 
         $now = date('Y-m-d H:i:s');
         $data=$this->model_ip_block->check_list($ip);
@@ -391,18 +389,18 @@ class Index extends CI_Controller {
 
        if(!$email){
         $this->session->set_flashdata('error', 'cant find the email id please fill the form once again!');   
-        return redirect('index/otp');
+        redirect('index/otp');
         exit;
        }
        $this->session->set_userdata('otp',$six_digit_random_number);
        $status = $this->sendmail->send_registration_email($name,$email,$six_digit_random_number);
        if(!$status){
         $this->session->set_flashdata('error', 'failed to sent mail please try again!');   
-        return redirect('index/otp');
+        redirect('index/otp');
         exit;
        }
          $this->session->set_flashdata('success', 'otp is sent to your email');   
         $this->session->set_userdata('timer', date('Y-m-d H:i:s'));
-        return redirect('index/otp');
+        redirect('index/otp');
     }
 }

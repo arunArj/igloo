@@ -20,7 +20,7 @@ class Model_winner extends CI_Model
     public function getTotalClaimedPointByUSer($id) 
 	{
 		if($id) {
-			$sql = 'SELECT SUM(points_spend) as total FROM `winner` WHERE user_id =? and status != 2';
+			$sql = 'SELECT SUM(points_spend) as total FROM `winner` WHERE user_id =?';
 			$query = $this->db->query($sql, array($id));
 			$result = $query->row();
 			return $result->total;
@@ -63,6 +63,19 @@ class Model_winner extends CI_Model
 // 		return $query->result_array();
 	}
 	
-
+	public function getAllWinnersByItem($item)
+	{
+	    $this->db->select('*');
+	    $this->db->from('winner');
+	    $this->db->join('consumer_record', 'winner.user_id = consumer_record.id', 'inner');
+	    if($item)
+	    $this->db->where('winner.prize',$item);
+	    $query = $this->db->get();
+	    return $query->result_array();
+	    
+// 	    $sql = "SELECT * FROM `winner` WHERE status = '1'";
+// 		$query = $this->db->query($sql);
+// 		return $query->result_array();
+	}
 }
 ?>

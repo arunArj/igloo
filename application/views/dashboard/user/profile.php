@@ -35,7 +35,7 @@
       </li>
     <li>
         <a href="<?php echo base_url() ?>dashboard/redeemItem" class="nav-link">
-        Claim Prize
+        Claim Now
         </a>
     </li>
         <li>

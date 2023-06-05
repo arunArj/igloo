@@ -75,10 +75,20 @@
         <?php       
         $attributes = array('id' => 'myform');
         echo form_open('index/registration_submit/en',$attributes); ?>
+                <?php if(form_error('email')){ ?>
+            <div id="confirmationPopup">
+                <div class="confirmation-content">
+                    <span id="cancelRedirectBtn" class="close-btn">&times;</span>
+                    <h2><?php //echo form_error('email'); ?></h2>
+                    <p>It appears that you are already a registered user. Kindly proceed to log in and update your points.</p>
+                    <button id="confirmRedirectBtn">Log In</button>
+                </div>
+            </div>
+            <?php } ?>
           <div class="row g-3">
             <div class="col-12 position-relative">
               <input type="text" id="code" name="code" class="form-control uni-code" placeholder="Enter your code here" required="" autocomplete="off">
-              <div id="ip_block"></div>
+              <div id="ip_block" style="background-color:transparent"></div>
               <?php echo form_error('code'); ?>
               <div id="ajxerror"></div>
               <div id="loader" style="display:none">
@@ -93,11 +103,12 @@
               <select class="form-select" id="country" name="country" >
                 <option value="">Select your country</option>
                 <option value="UAE">UAE</option>
-                <option value="Bahrain">Bahrain</option>
-                <option value="Egypt">Egypt</option>
-                <option value="Kuwait">Kuwait</option>
-                <option value="Qatar">Qatar</option>
                 <option value="Saudi Arabia">Saudi Arabia</option>
+                <option value="Kuwait">Kuwait</option>
+                <option value="Bahrain">Bahrain</option>
+                <option value="Jordan">Jordan</option>
+                <option value="Tunisia">Tunisia</option>
+                
               </select>
               <?php echo form_error('country'); ?>
             </div>
@@ -107,12 +118,14 @@
             </div>
             <div class="col-sm-6 col-12 position-relative">
               <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" autocomplete="off">
-               <?php echo form_error('email'); ?>
+               <?php //echo form_error('email'); 
+               ?>
             </div>
             <div class="col-sm-6 col-12 position-relative"> <span class="input-group-text" id="mobile_code">+971</span>
               <input type="tel" class="form-control phone-number" id="phone" name="phone" placeholder="Phone Number" autocomplete="off">
                <?php echo form_error('phone'); ?>
             </div>
+            
             <div class="col-12 d-flex align-items-center justify-content-center position-relative">
               <div class="form-check">
                 <input type="checkbox" class="form-check-input" name="tc" id="same-address">
@@ -242,25 +255,25 @@ $('#country').change(function(){
         $('#national_id').attr("placeholder", "ID Card Number");
         $('#mobile_code').text("+973");
     }
-    else if(country == 'Egypt')
-    {
-        $('#national_id').attr("placeholder", "National ID Number");
-        $('#mobile_code').text("+20");
-    }
     else if(country == 'Kuwait')
     {
         $('#national_id').attr("placeholder", "Civil ID Number");
         $('#mobile_code').text("+965");
     }
-    else if(country == 'Qatar')
-    {
-        $('#national_id').attr("placeholder", "Qatari ID Number");
-        $('#mobile_code').text("+974");
-    }
     else if(country == 'Saudi Arabia')
     {
         $('#national_id').attr("placeholder", "National ID Number");
         $('#mobile_code').text("+966");
+    }
+    else if(country == 'Jordan')
+    {
+        $('#national_id').attr("placeholder", "National ID Number");
+        $('#mobile_code').text("+962");
+    }
+    else if(country == 'Tunisia')
+    {
+        $('#national_id').attr("placeholder", "National ID Number");
+        $('#mobile_code').text("+216");
     }
     else
     {
@@ -313,4 +326,21 @@ $(document).ready(function () {
 	});
     
 });
+</script>
+<script>
+    
+    $(function() {
+
+        $('#confirmRedirectBtn').click(function() {
+            
+            var href2 = event.href2;
+            // Perform the redirect
+            window.location.href = "https://kgapps.in/web-projects/2023/iglooquanta/login";
+        });
+
+        $('#cancelRedirectBtn').click(function() {
+            // Hide the confirmation popup
+            $('#confirmationPopup').fadeOut();
+        });
+    });
 </script>

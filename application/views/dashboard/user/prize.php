@@ -7,31 +7,6 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <link href="<?php echo base_url();?>assets/frontend/dashboard/css/style.css" rel="stylesheet">
 <title>Igloo Quanta - Consumer Promotion 2023</title>
-<style>
-    /* Custom styles for the popup */
-    #confirmationPopup {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 300px;
-        padding: 20px;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        text-align: center;
-    }
-
-    #confirmationPopup h2 {
-        margin-top: 0;
-    }
-
-    #confirmationPopup button {
-        margin-top: 10px;
-    }
-</style>
 </head>
 
 <body>
@@ -60,7 +35,7 @@
       </li>
     <li>
         <a href="<?php echo base_url() ?>dashboard/redeemItem" class="nav-link active">
-        Claim Prize
+        Claim Now
         </a>
     </li>
         <li>
@@ -73,46 +48,47 @@
     </div>  
     <div class="content-right">
         <div class="container-fluid">
-<?php
-    $error = $this->session->flashdata('error');
-    if($error){?>
-        <div class="row g-5 mb-4">
-            <div class="col-12 p-4 custom-box pointsbig">  
-               <p><?php echo $error; ?>  </p>
-            </div>
-        </div>           
-<?php } ?>
-<?php
-    $success = $this->session->flashdata('success');
-    if($success){?>
-        <div class="row g-5 mb-4">
-            <div class="col-12 p-4 custom-box pointsbig">  
-               <p><?php echo $success; ?>  </p>
-            </div>
-        </div>           
-<?php } ?>
-            <div class="row">
-                <div class="col-lg-4 col-12 mb-4 mb-lg-0">
-                    <div class="card bgred">
+                    <?php
+                        $error = $this->session->flashdata('error');
+                        if($error){?>
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <?php echo $error; ?>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                    <?php } ?>
+                    <?php
+                        $success = $this->session->flashdata('success');
+                        if($success){?>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <?php echo $success; ?>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                    <?php } ?>
+                    
+            <div class="row pointsection">
+                <div class="col-sm-4 col-12 mb-4 mb-lg-0 text-center">
+                    <div class="card bgred <?php if($balancePoints >= 5000) { echo "";  } else { echo "noactive"; } ?>">
                         <div class="card-body">
                             <img src="<?php echo base_url();?>assets/frontend/dashboard/images/point-5000.png" alt="" class="img-fluid">
-                            <a class="redirectBtn" href="<?php echo base_url() ?>dashboard/redeemPrize?prize=iphone"><button class="btn btnsubmit-red">Redeem Prize</button></a>
+                            
+                            <a class="redirectBtn btn btnsubmit-red" href="<?php echo base_url() ?>dashboard/redeemPrize?prize=iphone">Redeem Now!</a>
+                            
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-12 mb-4 mb-lg-0">
-                    <div class="card bgred">
+                <div class="col-sm-4 col-12 mb-4 mb-lg-0 text-center">
+                    <div class="card bgred <?php if($balancePoints >= 2000) { echo "";  } else{ echo "noactive"; }  ?>">
                         <div class="card-body">
                             <img src="<?php echo base_url();?>assets/frontend/dashboard/images/point-2000.png" alt="" class="img-fluid">
-                    <a class="redirectBtn" href="<?php echo base_url() ?>dashboard/redeemPrize?prize=playstation"><button class="btn btnsubmit-red">Redeem Prize</button></a>
+                    <a class="redirectBtn btn btnsubmit-red" href="<?php echo base_url() ?>dashboard/redeemPrize?prize=playstation">Redeem Now!</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-12 mb-4 mb-lg-0">
-                    <div class="card bgred">
+                <div class="col-sm-4 col-12 mb-4 mb-lg-0 text-center">
+                    <div class="card bgred <?php if($balancePoints >= 1000) { echo "";  } else{ echo "noactive"; } ?>">
                         <div class="card-body">
                             <img src="<?php echo base_url();?>assets/frontend/dashboard/images/point-1000.png" alt="" class="img-fluid">
-                              <a class="redirectBtn" href="<?php echo base_url() ?>dashboard/redeemPrize?prize=airpods"><button class="btn btnsubmit-red" id="redirectBtn">Redeem Prize</button></a>
+                              <a class="redirectBtn btn btnsubmit-red" href="<?php echo base_url() ?>dashboard/redeemPrize?prize=airpods">Redeem Now!</a>
                         </div>
                     </div>
                 </div>
@@ -140,7 +116,7 @@
                                 ?>
                                 <div class="row">
                                     <div class="col-4 text-center boxContent">
-                                        <img src="<?php echo base_url().'assets/frontend/dashboard/images/'.$image;?>" alt="" width="150">
+                                        <img src="<?php echo base_url().'assets/frontend/dashboard/images/'.$image;?>" alt="" class="img-fluid">
                                     </div>
                                     <div class="col-4 text-center boxContent">
                                         <?php  echo $spend; ?>
@@ -158,10 +134,12 @@
     </div>
 </div>
 <div id="confirmationPopup">
-    <h2>Confirmation</h2>
-    <p>Are you sure you want to redirect?</p>
-    <button id="confirmRedirectBtn">Yes</button>
-    <button id="cancelRedirectBtn">No</button>
+    <div class="confirmation-content">
+        <h2>Confirmation</h2>
+        <p>Are you sure you want redeem your point</p>
+        <button id="confirmRedirectBtn" class="btn btnsubmit">Yes</button>
+        <button id="cancelRedirectBtn" class="btn btnsubmit">No</button>
+    </div>
 </div>
 <script type="text/javascript" src="<?php echo base_url();?>assets/frontend/dashboard/js/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>

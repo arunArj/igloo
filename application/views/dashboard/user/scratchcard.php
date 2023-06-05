@@ -18,7 +18,7 @@
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item"> <a href="<?php echo base_url() ?>dashboard/profile" class="nav-link" aria-current="page"> Profile </a> </li>
       <li> <a href="<?php echo base_url() ?>dashboard" class="nav-link"> Redeem Code </a> </li>
-      <li> <a href="<?php echo base_url() ?>dashboard/redeemItem" class="nav-link"> Claim Prize </a> </li>
+      <li> <a href="<?php echo base_url() ?>dashboard/redeemItem" class="nav-link"> Claim Now </a> </li>
       <li> <a href="<?php echo base_url() ?>consumer_auth/logout" class="nav-link"> Logout </a> </li>
     </ul>
   </div>
@@ -35,7 +35,7 @@
                 <canvas class="canvas" id="js-canvas" width="300" height="300"></canvas>
                 <?php  
 
-                        $attributes = array('id' => 'myform');
+                        $attributes = array('id' => 'myform','class' => 'form');
                         echo form_open('dashboard/claimPrize',$attributes); ?>
                 <div class="congrats"><img src="<?php echo base_url();?>assets/frontend/images/congrates-text.png" alt=""></div>
                 <h2>You've won</h2>

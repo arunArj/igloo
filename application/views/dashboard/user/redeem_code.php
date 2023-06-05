@@ -35,7 +35,7 @@
       </li>
     <li>
         <a href="<?php echo base_url() ?>dashboard/redeemItem" class="nav-link">
-        Claim Prize
+        Claim Now
         </a>
     </li>
         <li>
@@ -49,14 +49,12 @@
     <div class="content-right">
             <div class="container-fluid">
                 <div class="row mb-4">
-                    <div class="col-lg-6 col-12">
-                        <div class="card custom-box pointsbig">
-                            <div class="card-body">Your total points <span><?php echo $total_point?$total_point:0;  ?></span></div>
+                    <div class="col-lg-5 col-12">
+                        <div class="card custom-box">
+                            <div class="card-body point-display"><span><?php echo $balancePoints?$balancePoints:0;  ?></span> Your total points</div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6 col-12 mb-4">
+                    <div class="col-lg-7 col-12 mb-4">
                     <div class="card custom-box">
                         <div class="card-header boxTitle">Add more unique codes</div>
                         <div class="card-body">
@@ -94,7 +92,7 @@
                 </div>
                 </div>
             <div class="row">
-                <div class="col-lg-6 col-12">
+                <div class="col-12">
                     <div class="card custom-box">
                         <div class="card-body">
                             <div class="row">

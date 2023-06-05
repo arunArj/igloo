@@ -138,7 +138,7 @@ class SendMail
     }
     
     
-    public function prizeclaim($name,$email,$image,$prize){
+    public function prizeclaim($name,$email,$image,$prize,$requiredPoints){
 
         $message ='<!DOCTYPE html>
                     <html>
@@ -167,11 +167,13 @@ class SendMail
                         }
                     
                         .content {
-                          background-color: #ffffff;
+                            text-align: center;
+                          background-color: #9ddffe;
                           padding: 40px;
                         }
                     
                         .message {
+                            text-align: center;
                           margin-bottom: 30px;
                           font-size: 18px;
                         }
@@ -181,35 +183,30 @@ class SendMail
                         }
                     
                         .prize-image img {
+                            text-align: center;
                           max-width: 100%;
                           height: auto;
                         }
                     
-                        .footer {
-                          text-align: center;
-                          margin-top: 30px;
-                          font-size: 14px;
-                        }
+                    
                       </style>
                     </head>
                     
                     <body>
-                      <div class="container">
+                      <div class="container" style="background-color: #223771;color: #ffffff;">
                         <div class="header">
-                          <h1>Congratulations!</h1>
+                          <h1>Your summer is going to be fun ☀️</h1>
                         </div>
-                        <div class="content">
+                        <div class="content" style="background-color: #9ddffe;color: #000000;">
                           <p class="message">Dear '.$name.',</p>
-                          <p class="message">Congratulations! You have won the contest for '.$prize.'.</p>
+                          <p class="message">We congratulate you on redeeming your '.$requiredPoints.' points.</p>
+                          <p class="message">Here’s the selected item that you redeemed your points for: '.$prize.'.</p>
                           <div class="prize-image">
                           
                             <img src="'.base_url().$image.'" alt="Prize Image">
                           </div>
-                          <p class="message">We will contact you shortly.</p>
-                        </div>
-                        <div class="footer">
-                          <p>Thank you,</p>
-                          <p>IqlooQuanta team</p>
+                          <p class="message">Our team will reach out to you soon to get your details and deliver the selected item.</p>
+                          <p class="message">Contact us at reach@unipexfoods.com if our team doesn’t get in touch with you in the next 2 to 3 working days.</P>
                         </div>
                       </div>
                     </body>
@@ -220,7 +217,7 @@ class SendMail
         $this->ci->email->set_mailtype("html");
         $this->ci->email->from('noreply@example.com', 'No Reply');
         $this->ci->email->to($email);
-        $this->ci->email->subject('Welcome to Iqloo Quanta');
+        $this->ci->email->subject('Igloo & Quanta Scan for Fun 2023 – Congratulations on the successful redemption!');
         $this->ci->email->message($message);
 
         if ($this->ci->email->send()) {

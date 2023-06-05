@@ -10,7 +10,7 @@ class Scratchcard extends CI_Controller {
         $this->load->library('session');
         $this->load->model(['model_points']);
         $this->load->library('SendMail');
-    
+        $this->load->helper('security');
 	}
 	public function index()
 	{

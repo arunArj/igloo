@@ -64,7 +64,7 @@
       <div class="col-lg-4 col-12 position-relative form-unit custom-top animated bounceInUp">
           <div class="scanforfunlogo pb-3 animated pulse infinite"><img src="<?php echo base_url() ?>assets/frontend/images/scanforfun.png" alt=""></div>
            <div class="thankyouMessage">
-                <h1>Point successfully added</h1>
+                <h1>Points successfully added</h1>
                 <a href="<?php echo base_url() ?>/dashboard" class="btn">View your points</a>
           </div>
       </div>

@@ -7,6 +7,63 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <link href="<?php echo base_url() ?>assets/frontend/css/style.css" rel="stylesheet">
 <title>Igloo Quanta - Consumer Promotion 2023</title>
+<style>
+/* Styles for the popup */
+.popup-content {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0,0,0,0.2);
+    padding: 20px;
+    border: 1px solid #ccc;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    text-align: center;
+}
+.popup-wrap {
+    width: 500px;
+    height: auto;
+    margin: 0 auto;
+    padding: 50px;
+    background-color: #fff;
+    border: 0;
+    border-radius: 5px;
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.popup-wrap p{
+    font-size: 18px;
+    margin: 0;
+}
+
+/* Styles for the close button */
+.close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    font-size: 32px;
+    line-height: normal;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    border-radius: 50px;
+    margin: 0;
+    padding: 0;
+}
+@media only screen and (max-width: 768px), only screen and (max-device-width: 768px) {
+    .popup-wrap{
+        width: 80%;
+    }
+}
+  </style>
 </head>
 
 <body class="site_registration">
@@ -75,6 +132,15 @@
     </div>
   </div>
 </div>
+ <!--popup after 15 sec if the -->
+  <div class="popup-content" id="myPopup">
+    <div class="popup-wrap">
+        <span class="close-btn">&times;</span>
+        <!--<h2>Popup Content</h2>-->
+        <p>If you have not received the OTP, please double-check the email address you entered in the form.</p>
+    </div>
+  </div>
+  
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script>
@@ -148,7 +214,23 @@ return sec;
            startTimer();
         
     });
-</script>    
+</script> 
+<script>
+    $(document).ready(function() {
+      // Function to show the popup
+      function showPopup() {
+        $('#myPopup').fadeIn();
+      }
+
+      // Set a timeout of 30 seconds - 30000
+      setTimeout(showPopup, 15000);
+
+      // Close button event handler
+      $('.close-btn').on('click', function() {
+        $('#myPopup').fadeOut();
+      });
+    });
+  </script>
     
 </body>
 </html>

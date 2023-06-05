@@ -21,16 +21,16 @@
         <div class="col-lg-12">
            <div class="card text-center table-wrap">
               <div class="card-header">
-                <h2>Users</h2>
+                <h2>Winners</h2>
               </div>
               <div class="card-body">
-                <h5 class="card-title">All registered users</h5>
-                <form action="<?php echo base_url()?>admin/dashboard/getUsers">
+                <h5 class="card-title">Prize Requested List</h5>
+                <form action="<?php echo base_url()?>admin/dashboard/winnersList">
                     <select  name="item">
                         <option value="">select Prize</option>
-                        <option value="iphone">Iphone</option>
-                        <option value="playstation">Playstation</option>
-                        <option value="airpod">Airpod</option>
+                        <option value="1">Iphone</option>
+                        <option value="2">Playstation</option>
+                        <option value="3">Airpod</option>
                     </select>
                     <input type="submit" value="submit">
                 </form>
@@ -47,15 +47,20 @@
                           </thead>
                           <tbody>
                       <?php   foreach($winners as $key => $data)
-                      { if($data['prize']==1){$image ="iphone-single.png";$spend =  5000;}else if($data['prize']==2){ $image = "playstation-single.png";$spend = 2000; }else{$image = 'airpod-single.png';$spend =  1000;}
+                      { if($data['prize']==1){$image ='Iphone';$spend =  5000;}else if($data['prize']==2){ $image = "Playstation";$spend = 2000; }else{$image = 'Airpod';$spend =  1000;}
                       ?>
                             <tr>
                               <th scope="row"><?php  echo ++$key;?></th>
                               <td><a href="<?php echo base_url().'admin/dashboard/userCodes?user='.$data["id"]?>"><?php  echo $data['name'];?></a></td>
                               <td><?php  echo $data['email'];?></td>
                               <td><?php  echo $data['mobile'];?></td>
-                              <td><img src="<?php  echo base_url().'assets/frontend/dashboard/images/'.$image;?>"></td>
-                               <td><?php if($data['status']=='1'){ echo 'approved';}elseif($data['status']=='0'){echo 'pending';}else{echo 'rejected';}?></td>
+                              <td><?php  echo $image;?></td>
+                                <td>
+                                    <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider round"></span>
+                                    </label>
+                                   <?php if($data['status']=='1'){ echo 'approved';}elseif($data['status']=='0'){echo 'pending';}else{echo 'rejected';}?></td>
                             </tr>
                     <?php } ?>
                           </tbody>

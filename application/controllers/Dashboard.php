@@ -8,6 +8,8 @@ class Dashboard extends CI_Controller {
 		parent::__construct();
         $this->load->library('user_agent');
         $this->load->library('session');
+       // $this->load->library('security');
+       $this->load->helper('security');
         $this->load->library('CustomerAuth');
         $this->customerauth->not_logged_in();
         $this->load->library('sendMail');
@@ -17,16 +19,24 @@ class Dashboard extends CI_Controller {
 	public function index()
 	{
 	        $id = $this->session->userdata('user_id');
+	        $id =  $this->security->xss_clean( $id );
     	    $data['total_point'] =  $this->model_points->getTotalPointByUSer($id);
     	    $data['points'] = $this->model_points->getPointByUSer($id);
+    	    
+    	    $totalPoints = $this->model_points->getTotalPointByUSer($id);
+            $usedpoints = $this->model_winner->getTotalClaimedPointByUSer($id);
+
+            $balancePoints =  $totalPoints -  $usedpoints;
+        
+            $data['balancePoints'] = $balancePoints;
 	        return $this->load->view('dashboard/user/redeem_code',$data);
 	}
 	public function store()
 	{
 	     $this->form_validation->set_rules('code', 'Code', 'trim|required');
 	     $id = $this->session->userdata('user_id');
-
-        if ($this->form_validation->run() == TRUE) {
+        $id =  $this->security->xss_clean( $id );            
+        if ($this->form_validation->run() ) {
              $ip = $this->input->ip_address();
             
             //get current time
@@ -40,6 +50,7 @@ class Dashboard extends CI_Controller {
                 exit;
             }
             $code = $this->input->post('code');
+	        $code  =  $this->security->xss_clean( $code  );
             $codeCheck = $this->model_common->codeCheck($code);
             
             if(!$codeCheck){
@@ -87,7 +98,7 @@ class Dashboard extends CI_Controller {
         }
         $data['total_point'] =  $this->model_points->getTotalPointByUSer($id);
         $data['points'] = $this->model_points->getPointByUSer($id);
-         //return redirect('dashboard','refresh');
+
 	    return $this->load->view('dashboard/user/redeem_code',$data);
 	}
     
@@ -106,7 +117,9 @@ class Dashboard extends CI_Controller {
         $this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|matches[password]|trim');
          $this->form_validation->set_error_delimiters('<div class="validation-error">', '</div>');
         if ($this->form_validation->run() == TRUE) {
-           $profile = $this->model_common->updateUser($id,array('password'=> password_hash($this->input->post('password'), PASSWORD_BCRYPT)));
+            $dataIn = array('password'=> password_hash($this->input->post('password'), PASSWORD_BCRYPT));
+            $dataIn = $this->security->xss_clean($dataIn);
+           $profile = $this->model_common->updateUser($id,$dataIn);
             if($profile){
                 $this->session->set_flashdata('success', 'Password updated successfully!!');
             }
@@ -121,28 +134,39 @@ class Dashboard extends CI_Controller {
     
     public function redeemItem(){
         $id = $this->session->userdata('user_id');
+        $id =  $this->security->xss_clean($id);
         $data['winner'] = $this->model_winner->getWinnerDataByUser($id);
+        
+        $totalPoints = $this->model_points->getTotalPointByUSer($id);
+        $usedpoints = $this->model_winner->getTotalClaimedPointByUSer($id);
+
+        $balancePoints =  $totalPoints -  $usedpoints;
+        
+        $data['balancePoints'] = $balancePoints;
+        
 
         return $this->load->view('dashboard/user/prize',$data);
     }
     public function redeemPrize(){
         
-        $id = $this->session->userdata('user_id');
-        echo $id;
-        exit();
-        $consumer = $this->model_common->get_consumer($id);
+        $inputVar['id'] = $this->session->userdata('user_id');
+        $inputVar['prize'] = $this->input->get('prize');
+         $inputVar= $this->security->xss_clean($inputVar);
+        
+        $consumer = $this->model_common->get_consumer( $inputVar['id'] );
         if(!$consumer){
             $this->session->set_flashdata('error', 'user details not found!!');
             redirect('/dashboard/redeemItem','refresh');
             exit;
         }
-        $totalPoints = $this->model_points->getTotalPointByUSer($id);
-        $usedpoints = $this->model_winner->getTotalClaimedPointByUSer($id);
+        $totalPoints = $this->model_points->getTotalPointByUSer( $inputVar['id'] );
+        $usedpoints = $this->model_winner->getTotalClaimedPointByUSer( $inputVar['id'] );
 
         $balancePoints =  $totalPoints -  $usedpoints;
 
-        $prize = $this->input->get('prize');
-        switch($prize){
+    
+        
+        switch( $inputVar['prize']){
             case 'iphone':
                 $requiredPoints = 5000;
                 $p='1';
@@ -178,10 +202,10 @@ class Dashboard extends CI_Controller {
         $winnerCount = $this->model_winner->getWinnerCount($p);
 
         if($winnerCount<$lim){
-            $data = $this->model_winner->create(array('user_id'=>$id,'prize'=>$p,'points_spend'=>$requiredPoints));
+            $data = $this->model_winner->create(array('user_id'=> $inputVar['id'] ,'prize'=>$p,'points_spend'=>$requiredPoints));
             if($data){
-                $this->session->set_flashdata('success', 'Congragualtions you successfully applied for the prize!!');
-                $this->sendmail->prizeclaim($consumer->name,$consumer->email,$image,$prize);
+                $this->session->set_flashdata('success', 'Congratulations! You have successfully selected the item. <br>Go to your registered email account. We have sent you an email regarding the next steps.');
+                $this->sendmail->prizeclaim($consumer->name,$consumer->email,$image,$prize,$requiredPoints);
                 redirect('/dashboard/redeemItem');
                 exit;
             }
@@ -195,32 +219,34 @@ class Dashboard extends CI_Controller {
     }
 
     public function scratchcard(){
-  
-        $id = $this->session->userdata('user_id');
-        $code = $this->input->get('code');
-        $data['point']=$this->model_points->getPointByCodeandUser($id,$code);
+
+        $inputArr['id'] = $this->session->userdata('user_id');
+        $inputArr['code'] = $this->input->get('code');
+        $inputArr= $this->security->xss_clean($inputArr);
+        $data['point']=$this->model_points->getPointByCodeandUser($inputArr['id'], $inputArr['code']);
       
         $this->load->view('dashboard/user/scratchcard',$data);
     }
     
     public function claimPrize(){
-        $id = $this->session->userdata('user_id');
-        $code = $this->input->post('code');
-        $pointCheck = $this->model_points->getPointByCodeandUser($id,$code);
+        $inputArr['id'] =  $this->session->userdata('user_id');
+        $inputArr['code'] =$this->input->post('code');
+        $inputArr= $this->security->xss_clean($inputArr);
+        $pointCheck = $this->model_points->getPointByCodeandUser($inputArr['id'], $inputArr['code']);
 
         if(!$pointCheck){
             $this->session->set_flashdata('error', 'Code doesnt exist!!');
             redirect('dashboard');
             exit;
         }
-        $status =$data['point']=$this->model_points->update($code,array('status'=>1));
+        $status = $data['point']=$this->model_points->update($inputArr['code'],array('status'=>1));
         if($status){
-            $this->session->set_flashdata('success', 'Points successfully redeemed!!');
+            $this->session->set_flashdata('success', 'Your points have been successfully redeemed! Click on “Claim” for the next step.');
             redirect('dashboard/');
             exit;
         }
         $this->session->set_flashdata('error', 'unexpected error occured try again!!');
-        redirect('dashboard/scratchcard?code='.$code);
+        redirect('dashboard/scratchcard?code='.$inputArr['code']);
     }
     
     private function block_ip($ip)
@@ -228,9 +254,6 @@ class Dashboard extends CI_Controller {
         date_default_timezone_set('Asia/Kolkata'); 
         $now = date('Y-m-d H:i:s');
         $data=$this->model_ip_block->check_list($ip);
-        
-       
-        $now = date('Y-m-d H:i:s');
         
         if($data === false){
            

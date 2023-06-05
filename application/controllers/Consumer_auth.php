@@ -14,6 +14,7 @@ class Consumer_auth extends CI_Controller
         $this->load->library('CustomerAuth');
         $this->load->model(['model_common','model_ip_block']);	
 		$this->load->model('model_consumer_auth');
+		$this->load->helper('security');
 	}
 
 	/* 
@@ -28,15 +29,15 @@ class Consumer_auth extends CI_Controller
 		$this->form_validation->set_rules('email', 'Email', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');
          $this->form_validation->set_error_delimiters('<div class="error">', '</div>');
-        
-        if ($this->form_validation->run() == TRUE) {
+          $redirect='dashboard/login';
+        if ($this->form_validation->run()) {
             // true case
            	$username_exists = $this->model_consumer_auth->check_username($this->input->post('email'));
 
-           	if($username_exists == TRUE) {
+           	if($username_exists ) {
            	    
            		$login = $this->model_consumer_auth->login($this->input->post('email'), $this->input->post('password'));
-                
+              
            		if($login) {
            			$logged_in_sess = array(
            				'user_id' => $login['id'],
@@ -45,26 +46,26 @@ class Consumer_auth extends CI_Controller
 					);
                     
 					$this->session->set_userdata($logged_in_sess);
-				// echo $this->session->userdata('user_id');
-				// exit();	
+	
            			redirect('dashboard', 'refresh');
            			exit();
            		}
+           	
            		else {
            			$this->data['errors'] = 'Incorrect username/password combination';
-           			$this->load->view('dashboard/login', $this->data);
+           			$this->load->view( $redirect, $this->data);
            		}
            	}
            	else {
            		$this->data['errors'] = 'User name does not exists';
 
-           		$this->load->view('dashboard/login', $this->data);
+           		$this->load->view( $redirect, $this->data);
            	}	
         }
         else {
             // false case
             $this->session->sess_destroy();
-            $this->load->view('dashboard/login');
+            $this->load->view($redirect);
         }	
 	}
 
@@ -83,14 +84,19 @@ class Consumer_auth extends CI_Controller
 
 		$this->form_validation->set_rules('email', 'Email', 'required');
         $this->form_validation->set_error_delimiters('<div class="error">', '</div>');
-        
-        if ($this->form_validation->run() == TRUE) {
+        $redirect_url = 'dashboard/resetpassword';
+        if ($this->form_validation->run()) {
             // true case
-            $email = $this->input->post('email');
+            $email = $this->security->xss_clean( $this->input->post('email'));
            	$username = $this->model_consumer_auth->getUserName($email);
-            
-           	if($username != "") {
-           	    $otp = $this->input->post('otp');
+           	if($username =="") {
+           	               	    
+           	    $this->data['email']= "";
+           		$this->data['errors'] = 'User name does not exists';
+           		$this->load->view('dashboard/resetpassword',$this->data);
+           		exit;
+           	}
+           	    $otp = $this->security->xss_clean($this->input->post('otp'));
            	    if($otp != "")
            	    {
            	        $otp_confirmation = $this->model_common->getOtp($email);
@@ -129,7 +135,7 @@ class Consumer_auth extends CI_Controller
                             $this->sendmail->welcome_email($username,$email,$password);
                             $this->data['email'] = $this->input->post('email');
                	            $this->data['success'] = 'New Password sent to your Email id';
-               	            $this->load->view('dashboard/resetpassword',$this->data);
+               	            $this->load->view( $redirect_url,$this->data);
                         }
                         
                     }
@@ -137,8 +143,8 @@ class Consumer_auth extends CI_Controller
                     {
                         $this->data['email'] = $this->input->post('email');
                	        $this->data['errors_otp'] = 'Invalid OTP';
-               	        $this->load->view('dashboard/resetpassword',$this->data);
-               	        //die();
+               	        $this->load->view( $redirect_url,$this->data);
+       
                     }
            	    }
            	    else
@@ -147,14 +153,13 @@ class Consumer_auth extends CI_Controller
            	    
                	    $now = date('Y-m-d H:i:s');
                	    $six_digit_random_number = random_int(100000, 999999);
-               	    $password = substr(str_shuffle('0123456789ABCDEFGHJKLMNPQRSTUVWXYZ'),1,8);
                	    $otpData = array(
                         'email' => $this->input->post('email'),
                         'otp' => $six_digit_random_number,
                         'time'    => $now
                     );
         
-                    $insert_code = $this->model_common->addOtp($otpData);
+                    $this->model_common->addOtp($otpData);
                 
                     $emailStatus = $this->sendmail->send_registration_email($username,$this->input->post('email'),$six_digit_random_number);
            	    
@@ -163,37 +168,22 @@ class Consumer_auth extends CI_Controller
                	        
                	        $this->data['email'] = $this->input->post('email');
                	        $this->data['success'] = 'Otp sent to the email ID';
-               	        $this->load->view('dashboard/resetpassword',$this->data);
+               	        $this->load->view( $redirect_url,$this->data);
                	    }
                	    else
                	    {
                	        
                	        $this->data['email'] = $this->input->post('email');
                	        $this->data['errors'] = 'Please check your email';
-               	        $this->load->view('dashboard/resetpassword',$this->data);
+               	        $this->load->view( $redirect_url,$this->data);
                	    }
            	    }
-           		
-           	}
-           	else {
-           	    
-           	    $this->data['email']= "";
-           		$this->data['errors'] = 'User name does not exists';
-           		$this->load->view('dashboard/resetpassword',$this->data);
-           	}	
+
         }
         else {
             $this->data['email'] = '';
-            $this->load->view('dashboard/resetpassword',$this->data);
+            $this->load->view( $redirect_url,$this->data);
         }
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 
 }
