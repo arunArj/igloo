@@ -591,14 +591,7 @@ class CI_Upload {
 		 * we'll use move_uploaded_file(). One of the two should
 		 * reliably work in most environments
 		 */
-		if ( ! @copy($this->file_temp, $this->upload_path.$this->file_name))
-		{
-			if ( ! @move_uploaded_file($this->file_temp, $this->upload_path.$this->file_name))
-			{
-				$this->set_error('upload_destination_error', 'error');
-				return FALSE;
-			}
-		}
+
 
 		/*
 		 * Set the finalized image dimensions
