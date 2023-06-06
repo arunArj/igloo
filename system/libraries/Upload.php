@@ -375,7 +375,7 @@ class CI_Upload {
 	{
 	    
 	    // Get the uploaded file name updaed by Rahul 
-        $file_name = $_FILES['userfile']['name'];
+        $file_name =  $this->_clean_file_name($_FILES['userfile']['name']);
         
         // Define the allowed file types and their corresponding MIME types
         $allowed_types = array(
@@ -1350,5 +1350,19 @@ class CI_Upload {
 
 		$this->file_type = $file['type'];
 	}
+	
+	//--------rahul
+	protected function _clean_file_name($filename)
+    {
+        $disallowed = array_merge(
+            array(
+                '..', './', '\\'
+            ),
+            [':']
+        );
+    
+        $filename = str_replace($disallowed, '', $filename);
+        return $filename;
+    }
 
 }
