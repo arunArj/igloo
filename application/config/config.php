@@ -457,7 +457,7 @@ $config['csrf_token_name'] = 'csrf_test_name';
 $config['csrf_cookie_name'] = 'csrf_cookie_name';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = FALSE;
-$config['csrf_exclude_uris'] = array('admin/country/fetchRecord/bahrain','admin/winner/winner_selection','admin/winner/confirm_winner','admin/kuwait/fetchRecord/kuwait','admin/winner/confirm_winner_kuwait');
+$config['csrf_exclude_uris'] = array();
 
 /*
 |--------------------------------------------------------------------------

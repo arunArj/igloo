@@ -373,6 +373,34 @@ class CI_Upload {
 	 */
 	public function do_upload($field = 'userfile')
 	{
+	    
+	    // Get the uploaded file name updaed by Rahul 
+        $file_name = $_FILES['userfile']['name'];
+        
+        // Define the allowed file types and their corresponding MIME types
+        $allowed_types = array(
+            'jpg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            // Add more file types as needed
+        );
+        
+        // Validate the file name and type
+        if (!preg_match('/^[a-zA-Z0-9_\-]+\.[a-zA-Z0-9]+$/', $file_name)) {
+            // Invalid file name format
+            // Handle the error as needed
+        }
+        
+        $file_ext = pathinfo($file_name, PATHINFO_EXTENSION);
+        $file_mime = $_FILES['userfile']['type'];
+        
+        if (!in_array($file_mime, $allowed_types) || !array_key_exists($file_ext, $allowed_types)) {
+            // Invalid file type
+            // Handle the error as needed
+        }
+        
+        // pathtraversal end - Rahul
+        
 		// Is $_FILES[$field] set? If not, no reason to continue.
 		if (isset($_FILES[$field]))
 		{
