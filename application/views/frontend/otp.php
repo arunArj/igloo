@@ -8,61 +8,7 @@
 <link href="<?php echo base_url() ?>assets/frontend/css/style.css" rel="stylesheet">
 <title>Igloo Quanta - Consumer Promotion 2023</title>
 <style>
-/* Styles for the popup */
-.popup-content {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0,0,0,0.2);
-    padding: 20px;
-    border: 1px solid #ccc;
-    width: 100%;
-    height: 100%;
-    z-index: 1000;
-    text-align: center;
-}
-.popup-wrap {
-    width: 500px;
-    height: auto;
-    margin: 0 auto;
-    padding: 50px;
-    background-color: #fff;
-    border: 0;
-    border-radius: 5px;
-    position: relative;
-    top: 50%;
-    transform: translateY(-50%);
-}
-.popup-wrap p{
-    font-size: 18px;
-    margin: 0;
-}
 
-/* Styles for the close button */
-.close-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    cursor: pointer;
-    font-size: 32px;
-    line-height: normal;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #000;
-    border-radius: 50px;
-    margin: 0;
-    padding: 0;
-}
-@media only screen and (max-width: 768px), only screen and (max-device-width: 768px) {
-    .popup-wrap{
-        width: 80%;
-    }
-}
   </style>
 </head>
 
@@ -106,7 +52,7 @@
     <div class="row text-center">
       <div class="col-lg-4 col-12 productLeft d-flex align-items-center justify-content-center unit-left animated bounceInUp"> <img src="<?php echo base_url() ?>assets/frontend/images/unit-left.png" alt=""> </div>
       <div class="col-lg-4 col-12 position-relative form-unit custom-top animated bounceInUp">
-          <div class="scanforfunlogo pb-3 animated pulse infinite"><img src="<?php echo base_url() ?>assets/frontend/images/scanforfun.png" alt=""></div>
+          <div class="scanforfunlogo pb-3"><img src="<?php echo base_url() ?>assets/frontend/images/scan_for_fun_new.png" alt=""></div>
             <div class="opt-wrapper">
                 <p>Please enter verification code sent to your registered email id</p>
                 <div class="opt-container">
@@ -135,9 +81,16 @@
  <!--popup after 15 sec if the -->
   <div class="popup-content" id="myPopup">
     <div class="popup-wrap">
-        <span class="close-btn">&times;</span>
-        <!--<h2>Popup Content</h2>-->
         <p>If you have not received the OTP, please double-check the email address you entered in the form.</p>
+        <span class="close-btn">Close</span>
+    </div>
+  </div>
+  
+  <!--popup after 15 sec if the -->
+  <div class="popup-content" id="notificationPopup">
+    <div class="popup-wrap">
+        <p>Please enter verification code sent to your registered email id</p>
+        <span class="close-btn">Close</span>
     </div>
   </div>
   
@@ -217,15 +170,24 @@ return sec;
 </script> 
 <script>
     $(document).ready(function() {
-      // Function to show the popup
       function showPopup() {
         $('#myPopup').fadeIn();
       }
 
       // Set a timeout of 30 seconds - 30000
       setTimeout(showPopup, 15000);
+      $('.close-btn').on('click', function() {
+        $('#myPopup').fadeOut();
+      });
+    });
+    
+    $(document).ready(function() {
+      function showNotificationPopup() {
+        $('#notificationPopup').fadeIn();
+      }
 
-      // Close button event handler
+      // Set a timeout of 30 seconds - 30000
+      setTimeout(showPopup, 1);
       $('.close-btn').on('click', function() {
         $('#myPopup').fadeOut();
       });

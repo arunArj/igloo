@@ -12,6 +12,8 @@ class Consumer_auth extends CI_Controller
         $this->load->library('session');
         $this->load->library('SendMail');
         $this->load->library('CustomerAuth');
+        $this->load->library('CustomHashing');
+        $this->load->library('encryption');
         $this->load->model(['model_common','model_ip_block']);	
 		$this->load->model('model_consumer_auth');
 		$this->load->helper('security');
@@ -28,15 +30,17 @@ class Consumer_auth extends CI_Controller
 
 		$this->form_validation->set_rules('email', 'Email', 'required');
         $this->form_validation->set_rules('password', 'Password', 'required');
-         $this->form_validation->set_error_delimiters('<div class="error">', '</div>');
-          $redirect='dashboard/login';
+        $this->form_validation->set_error_delimiters('<div class="error">', '</div>');
+        $redirect='dashboard/login';
+        
         if ($this->form_validation->run()) {
             // true case
-           	$username_exists = $this->model_consumer_auth->check_username($this->input->post('email'));
-
+            $email = $this->security->xss_clean( $this->input->post('email'));
+            $password = $this->security->xss_clean( $this->input->post('password'));
+           	$username_exists = $this->model_consumer_auth->check_username();
+           	
            	if($username_exists ) {
-           	    
-           		$login = $this->model_consumer_auth->login($this->input->post('email'), $this->input->post('password'));
+           		$login = $this->model_consumer_auth->login($email, $password);
               
            		if($login) {
            			$logged_in_sess = array(
@@ -63,7 +67,7 @@ class Consumer_auth extends CI_Controller
            	}	
         }
         else {
-            // false case
+
             $this->session->sess_destroy();
             $this->load->view($redirect);
         }	
@@ -89,13 +93,15 @@ class Consumer_auth extends CI_Controller
             // true case
             $email = $this->security->xss_clean( $this->input->post('email'));
            	$username = $this->model_consumer_auth->getUserName($email);
+         
            	if($username =="") {
-           	               	    
+           	           	    
            	    $this->data['email']= "";
            		$this->data['errors'] = 'User name does not exists';
            		$this->load->view('dashboard/resetpassword',$this->data);
            		exit;
            	}
+           	    $username  = $this->encryption->decrypt($username);
            	    $otp = $this->security->xss_clean($this->input->post('otp'));
            	    if($otp != "")
            	    {
@@ -112,8 +118,7 @@ class Consumer_auth extends CI_Controller
                         $current_time = new DateTime();
                         
                         // Set the provided time
-                        $provided_time = new DateTime($otp_confirmation->time); // Replace with your provided time
-                        
+                        $provided_time = new DateTime($otp_confirmation->time);
                         // Calculate the time difference
                         $time_diff = date_diff($current_time, $provided_time);
                         
@@ -133,7 +138,7 @@ class Consumer_auth extends CI_Controller
                         if($updatePassword){
                             
                             $this->sendmail->welcome_email($username,$email,$password);
-                            $this->data['email'] = $this->input->post('email');
+                            $this->data['email'] = $email;
                	            $this->data['success'] = 'New Password sent to your Email id';
                	            $this->load->view( $redirect_url,$this->data);
                         }
@@ -141,7 +146,7 @@ class Consumer_auth extends CI_Controller
                     }
                     else
                     {
-                        $this->data['email'] = $this->input->post('email');
+                        $this->data['email'] = $email;
                	        $this->data['errors_otp'] = 'Invalid OTP';
                	        $this->load->view( $redirect_url,$this->data);
        
@@ -154,26 +159,24 @@ class Consumer_auth extends CI_Controller
                	    $now = date('Y-m-d H:i:s');
                	    $six_digit_random_number = random_int(100000, 999999);
                	    $otpData = array(
-                        'email' => $this->input->post('email'),
+                        'email' =>$this->customhashing->hashData($email),
                         'otp' => $six_digit_random_number,
                         'time'    => $now
                     );
         
                     $this->model_common->addOtp($otpData);
                 
-                    $emailStatus = $this->sendmail->send_registration_email($username,$this->input->post('email'),$six_digit_random_number);
-           	    
+                    $emailStatus = $this->sendmail->send_registration_email($username,$email,$six_digit_random_number);
+           	       $this->data['email'] =$email;
                	    if($emailStatus)
                	    {
                	        
-               	        $this->data['email'] = $this->input->post('email');
+               	     
                	        $this->data['success'] = 'Otp sent to the email ID';
                	        $this->load->view( $redirect_url,$this->data);
                	    }
                	    else
                	    {
-               	        
-               	        $this->data['email'] = $this->input->post('email');
                	        $this->data['errors'] = 'Please check your email';
                	        $this->load->view( $redirect_url,$this->data);
                	    }

@@ -9,24 +9,29 @@
 <title>Igloo Quanta - Consumer Promotion 2023</title>
 </head>
 
-<body class="site_home">
+<body class="site_home site_home_new_bg">
     
     <div class="wrapper">
         <div class="position-absolute promo-unit-home animated flipInY"><img src="<?php echo base_url() ?>assets/frontend/images/promo-unit-home.png" alt="" class="img-fluid"></div>
         <div class="position-absolute promo-unit-home animated bounceInUp"><img src="<?php echo base_url() ?>assets/frontend/images/promo-unit-home-products.png" alt="" class="img-fluid"></div>
         <div class="container-fluid">
-            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 headerlarge">
-            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none logo-wrap">
-            <img src="<?php echo base_url() ?>assets/frontend/images/logo.png" alt="logo">
-            </a>
-
-            <ul class="nav nav-pills">
-            <li class="nav-item"><a href="<?php echo base_url() ?>" class="nav-link active" aria-current="page">Home</a></li>
-            <li class="nav-item"><a href="<?php echo base_url() ?>login" class="nav-link">Redeem Points</a></li>
-            <li class="nav-item"><a href="<?php echo base_url() ?>winners" class="nav-link">Winners</a></li>
-            <li class="nav-item"><a href="javascript:void(0);" class="nav-link">العربية</a></li>
-            </ul>
+            <div class="row">
+            <header class="d-flex flex-wrap align-items-start justify-content-between py-3 mb-4 headerlarge">
+                <a href="/" class="d-flex align-items-start justify-content-start mb-3 mb-md-0 me-md-auto text-dark text-decoration-none logo-wrap">
+                    <img src="<?php echo base_url() ?>assets/frontend/images/igloo-logo.png" alt="logo">
+                </a>
+                
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a href="<?php echo base_url() ?>" class="nav-link active" aria-current="page">Home</a></li>
+                    <li class="nav-item"><a href="<?php echo base_url() ?>login" class="nav-link">Redeem Points</a></li>
+                    <li class="nav-item"><a href="<?php echo base_url() ?>winners" class="nav-link">Winners</a></li>
+                    <li class="nav-item"><a href="javascript:void(0);" class="nav-link">العربية</a></li>
+                </ul>
+                <a href="/" class="d-flex align-items-end justify-content-end mb-3 mb-md-0 ms-md-auto text-dark text-decoration-none logo-wrap">
+                    <img src="<?php echo base_url() ?>assets/frontend/images/quanta-logo.png" alt="logo">
+                </a>
             </header>
+            </div>
             <header class="headerMobile">
                 <a href="/" class="logo"><img src="<?php echo base_url() ?>assets/frontend/images/logo.png" alt="logo" class="img-fluid"></a>
                     <div id="toggle">

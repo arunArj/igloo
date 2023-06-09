@@ -9,21 +9,34 @@
 <title>Igloo Quanta - Consumer Promotion 2023</title>
 </head>
 
-<body class="site_registration">
+<body class="site_registration site_registration_new">
+    <div id="confirmationPopup" style="display:none">
+        <div class="confirmation-content">
+            <span id="cancelRedirectBtn" class="close-btn">&times;</span>
+            <h2><?php //echo form_error('email'); ?></h2>
+            <p>It appears that you are already a registered user. Kindly proceed to log in and update your points.</p>
+            <button id="confirmRedirectBtn">Log In</button>
+        </div>
+    </div>
 <div class="wrapper">
   <div class="container-fluid">
-    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 headerlarge"> 
-        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none logo-wrap"> 
-            <img class="logo" src="<?php echo base_url() ?>assets/frontend/images/logo.png"  alt="logo"> 
-        </a>
-      <ul class="nav nav-pills">
-        <li class="nav-item"><a href="<?php echo base_url() ?>" class="nav-link" aria-current="page">Home</a></li>
-        <li class="nav-item"><a href="<?php echo base_url() ?>login" class="nav-link">Redeem Points</a></li>
-        <li class="nav-item"><a href="<?php echo base_url() ?>winners" class="nav-link">Winners</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">العربية</a></li>
-      </ul>
-    </header>
-    <header class="headerMobile">
+    <div class="row">
+            <header class="d-flex flex-wrap align-items-center justify-content-between py-3 mb-4 headerlarge">
+                <a href="/" class="d-flex align-items-start justify-content-start mb-3 mb-md-0 me-md-auto text-dark text-decoration-none logo-wrap">
+                    <img src="<?php echo base_url() ?>assets/frontend/images/igloo-logo.png" alt="logo">
+                </a>
+                
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a href="<?php echo base_url() ?>" class="nav-link active" aria-current="page">Home</a></li>
+                    <li class="nav-item"><a href="<?php echo base_url() ?>login" class="nav-link">Redeem Points</a></li>
+                    <li class="nav-item"><a href="<?php echo base_url() ?>winners" class="nav-link">Winners</a></li>
+                    <li class="nav-item"><a href="javascript:void(0);" class="nav-link">العربية</a></li>
+                </ul>
+                <a href="/" class="d-flex align-items-end justify-content-end mb-3 mb-md-0 ms-md-auto text-dark text-decoration-none logo-wrap">
+                    <img src="<?php echo base_url() ?>assets/frontend/images/quanta-logo.png" alt="logo">
+                </a>
+            </header>
+            <header class="headerMobile">
                 <a href="/" class="logo"><img src="<?php echo base_url() ?>assets/frontend/images/logo.png" alt="logo" class="img-fluid"></a>
                     <div id="toggle">
                         <button class="btn btn--hamburger navbar__hamburger js-nav-btn formobilehamburger">
@@ -32,23 +45,22 @@
                             <span class="btn--hamburger__line bottom"></span>
                         </button>
                     </div>
-                        
-                    
             </header>
             <div id="nav-list-mobile">
                 <ul class="nav nav-pills">
-                    <li><a href="<?php echo base_url() ?>">Home</a></li>
+                    <li><a href="<?php echo base_url() ?>" class="active" aria-current="page">Home</a></li>
                     <li><a href="<?php echo base_url() ?>login" class="">Redeem Points</a></li>
                     <li><a href="<?php echo base_url() ?>winners" class="">Winners</a></li>
                     <li><a href="javascript:void(0);" class="">العربية</a></li>
                 </ul>
+            </div>
             </div>
   </div>
   <div class="container-fluid">
     <div class="row text-center">
       <div class="col-lg-4 col-12 productLeft"> <img src="<?php echo base_url() ?>assets/frontend/images/unit-left.png" alt=""> </div>
       <div class="col-lg-4 col-12 position-relative form-unit custom-top animated bounceInUp">
-          <div class="scanforfunlogo pb-3 animated pulse infinite"><img src="<?php echo base_url() ?>assets/frontend/images/scanforfun.png" alt=""></div>
+          <div class="scanforfunlogo pb-3"><img src="<?php echo base_url() ?>assets/frontend/images/scan_for_fun_new.png" alt=""></div>
           <div class="col-12  d-md-block d-lg-none promo-unit-registration-mobile">
               <img src="<?php echo base_url() ?>assets/frontend/images/screen02mobile.png" alt="" class="img-fluid">
           </div>
@@ -72,23 +84,14 @@
               ?>
             </div>
         <?php endif; ?>
+                
         <?php       
         $attributes = array('id' => 'myform');
         echo form_open('index/registration_submit/en',$attributes); ?>
-                <?php if(form_error('email')){ ?>
-            <div id="confirmationPopup">
-                <div class="confirmation-content">
-                    <span id="cancelRedirectBtn" class="close-btn">&times;</span>
-                    <h2><?php //echo form_error('email'); ?></h2>
-                    <p>It appears that you are already a registered user. Kindly proceed to log in and update your points.</p>
-                    <button id="confirmRedirectBtn">Log In</button>
-                </div>
-            </div>
-            <?php } ?>
           <div class="row g-3">
             <div class="col-12 position-relative">
               <input type="text" id="code" name="code" class="form-control uni-code" placeholder="Enter your code here" required="" autocomplete="off">
-              <div id="ip_block" style="background-color:transparent"></div>
+              <div id="ip_block" style="background-color:transparent"> <label id='code-error' class='error' for='code'></label></div>
               <?php echo form_error('code'); ?>
               <div id="ajxerror"></div>
               <div id="loader" style="display:none">
@@ -96,10 +99,14 @@
               </div>
             </div>
             <div class="col-12 position-relative">
-              <input type="text" class="form-control" id="name" name="name" placeholder="Full Name" value="" autocomplete="off">
+              <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" value="" autocomplete="off">
                  <?php echo form_error('name'); ?>
             </div>
-            <div class="col-md-6 col-12 position-relative">
+            <div class="col-12 position-relative">
+              <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" value="" autocomplete="off">
+                 <?php echo form_error('name'); ?>
+            </div>
+            <div class="col-12 position-relative">
               <select class="form-select" id="country" name="country" >
                 <option value="">Select your country</option>
                 <option value="UAE">UAE</option>
@@ -112,16 +119,13 @@
               </select>
               <?php echo form_error('country'); ?>
             </div>
-            <div class="col-md-6 col-12 position-relative">
-              <input type="text" class="form-control" id="national_id" name="national_id" placeholder="National ID Number" value="" autocomplete="off">
-              <?php echo form_error('national_id'); ?>
-            </div>
-            <div class="col-sm-6 col-12 position-relative">
+            
+            <div class="col-12 position-relative">
               <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" autocomplete="off">
-               <?php //echo form_error('email'); 
+               <?php echo form_error('email'); 
                ?>
             </div>
-            <div class="col-sm-6 col-12 position-relative"> <span class="input-group-text" id="mobile_code">+971</span>
+            <div class="col-12 position-relative"> <span class="input-group-text" id="mobile_code">+971</span>
               <input type="tel" class="form-control phone-number" id="phone" name="phone" placeholder="Phone Number" autocomplete="off">
                <?php echo form_error('phone'); ?>
             </div>
@@ -137,10 +141,10 @@
               <!--<button class="submitBtn" type="submit" data-bs-toggle="modal" data-bs-target="#otpModal"></button>-->
                <button class="submitBtn" type="submit">Submit</button>
             </div>
-            <div class="col-12 pb-4 validityText">
+            <div class="col-12 signuplink">
                 <p><a href="<?php echo base_url() ?>login">Already have an account?</a></p>
             </div>
-            <div class="col-12 pb-4 validityText">
+            <div class="col-12 validityText">
                 <p>Promotion valid from 1<sup>st</sup> June 2023 to 30<sup>th</sup> June 2023</p>
             </div>
           </div>
@@ -200,11 +204,12 @@
 $(document).ready(function(){
   var csrfName = '<?php echo $this->security->get_csrf_token_name(); ?>';
   var csrfHash = '<?php echo $this->security->get_csrf_hash(); ?>';
+
  $('#code').change(function(){
     var code = $('#code').val();
     $('#loader').attr('style', 'visibility:visible');
     var ajaxresponse = "";
-    var ipblock = "";
+    //var ipblock = "";
     var dataJson = { [csrfName]: csrfHash,"code":code};
     if(code != '')
     {
@@ -217,7 +222,7 @@ $(document).ready(function(){
         {
           if(response.success === true)
           {
-            //ajaxresponse = "<span>"+response.messages+"</span>";
+           
             ajaxresponse = "<img src='<?php echo base_url() ?>assets/frontend/images/check.png'>";
             csrfName = response.csrfName;
             csrfHash = response.csrfHash;
@@ -225,18 +230,53 @@ $(document).ready(function(){
           }
           else
           {
-            //ajaxresponse = "<span>"+response.messages+"</span>";
-            ipblock = "<label id='code-error' class='error' for='code'>"+response.messages+"</label>"
+            
+             $("#code-error").text(response.messages);
+             $("#code-error").attr('style', 'visibility:visible');
             ajaxresponse = "<img src='<?php echo base_url() ?>assets/frontend/images/cross.png'>";
             document.getElementById("code").value = "";
             csrfName = response.csrfName;
             csrfHash = response.csrfHash;
 
           }
-         
+
           $("#ajxerror").html(ajaxresponse);
-          $("#ip_block").html(ipblock);
+       
           $('#loader').attr('style', 'display:none');
+    
+        }
+      });
+    }  
+  }); 
+  
+  
+   $('#email').change(function(){
+    var email = $('#email').val();
+    //$('#loader').attr('style', 'visibility:visible');
+
+    //var ipblock = "";
+    var dataJson = { [csrfName]: csrfHash,"email":email};
+    if(code != '')
+    {
+      $.ajax({
+        url:"<?php echo base_url(); ?>index/check_email",
+        method:"POST",
+        dataType: 'json',
+        data: dataJson,
+        success:function(response)
+        {
+            csrfName = response.csrfName;
+            csrfHash = response.csrfHash;
+          if(response.success === true)
+          {
+            $("#confirmationPopup").show();
+            $('.submitBtn'). attr("disabled", true); 
+
+          }
+          else
+          {
+                $('.submitBtn'). attr("disabled", false); 
+          }
     
         }
       });
@@ -247,37 +287,37 @@ $('#country').change(function(){
     var country = $('#country').val();
     if(country == 'UAE')
     {
-        $('#national_id').attr("placeholder", "Emirates ID Number");
+        
         $('#mobile_code').text("+971");
     }
     else if(country == 'Bahrain')
     {
-        $('#national_id').attr("placeholder", "ID Card Number");
+        
         $('#mobile_code').text("+973");
     }
     else if(country == 'Kuwait')
     {
-        $('#national_id').attr("placeholder", "Civil ID Number");
+        
         $('#mobile_code').text("+965");
     }
     else if(country == 'Saudi Arabia')
     {
-        $('#national_id').attr("placeholder", "National ID Number");
+        
         $('#mobile_code').text("+966");
     }
     else if(country == 'Jordan')
     {
-        $('#national_id').attr("placeholder", "National ID Number");
+        
         $('#mobile_code').text("+962");
     }
     else if(country == 'Tunisia')
     {
-        $('#national_id').attr("placeholder", "National ID Number");
+       
         $('#mobile_code').text("+216");
     }
     else
     {
-        $('#national_id').attr("placeholder", "National ID Number");
+        
         $('#mobile_code').text("+971");
     }
    
@@ -294,13 +334,13 @@ $(document).ready(function () {
             code: {
                 required: true
           },
-            name: {
+            fname: {
+                required: true
+            },
+            lname: {
                 required: true
             },
             country: {
-                required: true
-            },
-            national_id: {
                 required: true
             },
             mobile: {
@@ -326,6 +366,15 @@ $(document).ready(function () {
 	});
     
 });
+</script>
+<script>
+    $(window).scroll(function(){
+        var sticky = $('header'),
+        scroll = $(window).scrollTop();
+        
+        if (scroll >= 70) sticky.addClass('bg-white');
+        else sticky.removeClass('bg-white');
+    });
 </script>
 <script>
     

@@ -17,11 +17,11 @@ class Model_points extends CI_Model
 	}
 	public function pointAddedCheck($code)
     {
+
         if($code) {
 			$sql = 'SELECT * FROM `point_table` WHERE code = ? and status = 1';
 			$query = $this->db->query($sql, array($code));
-// 			echo $this->db->last_query();
-// 			exit();
+
 			$result = $query->num_rows();
 			return ($result == 1) ? true : false;
 		}
@@ -31,6 +31,7 @@ class Model_points extends CI_Model
     
     public function getPointByUSer($id) 
 	{
+
 		if($id) {
 			$sql = 'SELECT * FROM `point_table` WHERE user_id = ?';
 			$query = $this->db->query($sql, array($id));
@@ -43,6 +44,7 @@ class Model_points extends CI_Model
 	    
     public function getTotalPointByUSer($id) 
 	{
+
 		if($id) {
 			$sql = 'SELECT SUM(point) as total FROM `point_table` WHERE user_id =? and status = 1';
 			$query = $this->db->query($sql, array($id));
@@ -54,6 +56,7 @@ class Model_points extends CI_Model
 	}
 	public function getPointByCodeandUser($id,$code) 
 	{
+
 		if($id) {
 			$sql = 'SELECT * FROM `point_table` WHERE user_id =? and code = ? and status = 0';
 			$query = $this->db->query($sql, array($id,$code));

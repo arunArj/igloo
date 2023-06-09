@@ -10,7 +10,27 @@
 </head>
 
 <body>
-
+<div class="popup-container">
+    <div class="popup-box">
+      <?php
+                    $error = $this->session->flashdata('error');
+                    if($error){?>
+                            <div>  
+                               <?php echo $error; ?>
+                            </div>
+                <?php } ?>
+                <?php
+                    $success = $this->session->flashdata('success');
+                    if($success){?>
+                        
+                            <div>  
+                             <?php echo $success; ?>
+                            </div>
+         
+                <?php } ?>
+                <span class="close-button">Close</span>
+    </div>
+  </div>
 <div class="wrapper">
 <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-between p-3">
 <img src="<?php echo base_url();?>assets/frontend/dashboard/images/logo.png" alt="" class="img-fluid" style="max-height: 100%">
@@ -58,22 +78,6 @@
                     <div class="card custom-box">
                         <div class="card-header boxTitle">Add more unique codes</div>
                         <div class="card-body">
-                            <?php
-                    $error = $this->session->flashdata('error');
-                    if($error){?>
-                            <div class="alert alert-danger">  
-                               <?php echo $error; ?>
-                            </div>
-                <?php } ?>
-                <?php
-                    $success = $this->session->flashdata('success');
-                    if($success){?>
-                        
-                            <div class="alert alert-success">  
-                             <?php echo $success; ?>
-                            </div>
-         
-                <?php } ?>
                             <?php       
                         $attributes = array('id' => 'myform');
                         echo form_open('dashboard/store',$attributes); ?>
@@ -120,7 +124,7 @@
     </div>
     
 </div>
-    
+   
 <script type="text/javascript" src="<?php echo base_url();?>assets/frontend/dashboard/js/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script>
@@ -132,5 +136,19 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function() {
+      <?php if (isset($_SESSION['error']) OR isset($_SESSION['success'])): ?>
+        $(window).on('load', function() {
+          $('.popup-container').show();
+        });
+        <?php //unset($_SESSION['success']); ?>
+      <?php endif; ?>
+      
+      $('.close-button').click(function() {
+        $('.popup-container').fadeOut(); 
+      });
+    });
+  </script>
 </body>
 </html>

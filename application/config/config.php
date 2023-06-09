@@ -327,7 +327,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/user_guide/libraries/encryption.html
 |
 */
-$config['encryption_key'] = 'AswLGvwR6Q5aztgw';
+$config['encryption_key'] = hex2bin('35d30f576cd899e01dc27175e3d60a6e');
 
 /*
 |--------------------------------------------------------------------------
@@ -479,6 +479,8 @@ $config['csrf_exclude_uris'] = array();
 | by the output class.  Do not 'echo' any values with compression enabled.
 |
 */
+
+
 $config['compress_output'] = FALSE;
 
 /*

@@ -7,6 +7,7 @@ class Model_ip_block extends CI_Model
 	}
   
     public function check_list($ip){
+       
         $this->db->where('ip',$ip);
         $query=$this->db->get('block_list');
         if($query->num_rows() > 0)
@@ -26,6 +27,7 @@ class Model_ip_block extends CI_Model
         return false;
     }
     public function update($data,$id){
+        
         if($data && $id) {
             $this->db->where('id',$id);
 			$update = $this->db->update('block_list', $data);
@@ -35,7 +37,9 @@ class Model_ip_block extends CI_Model
         return false;
     }
     public function check_for_blockedip($ip){
-         date_default_timezone_set('Asia/Kolkata'); 
+        
+      
+        date_default_timezone_set('Asia/Kolkata'); 
         $now = date('Y-m-d H:i:s');
         $sql='select *
         from block_list
@@ -51,7 +55,7 @@ class Model_ip_block extends CI_Model
             return false;
         }
 
-       // return ($result == 1) ? true : false;
+      
     }
    
 }

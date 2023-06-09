@@ -10,7 +10,28 @@
 </head>
 
 <body>
-
+<div class="popup-container">
+    <div class="popup-box">
+      
+      <?php
+                    $error = $this->session->flashdata('error');
+                    if($error){?>
+                            <div>  
+                               <?php echo $error; ?>
+                            </div>
+                <?php } ?>
+                <?php
+                    $success = $this->session->flashdata('success');
+                    if($success){?>
+                        
+                            <div>  
+                             <?php echo $success; ?>
+                            </div>
+         
+                <?php } ?>
+                <span class="close-button">Close</span>
+    </div>
+  </div>
 <div class="wrapper">
 <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-between p-3">
 <img src="<?php echo base_url();?>assets/frontend/dashboard/images/logo.png" alt="" class="img-fluid" style="max-height: 100%">
@@ -48,22 +69,6 @@
     </div>  
     <div class="content-right">
         <div class="container-fluid">
-                    <?php
-                        $error = $this->session->flashdata('error');
-                        if($error){?>
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                                <?php echo $error; ?>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                    <?php } ?>
-                    <?php
-                        $success = $this->session->flashdata('success');
-                        if($success){?>
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                <?php echo $success; ?>
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </div>
-                    <?php } ?>
                     
             <div class="row pointsection">
                 <div class="col-sm-4 col-12 mb-4 mb-lg-0 text-center">
@@ -133,7 +138,7 @@
              </div>
     </div>
 </div>
-<div id="confirmationPopup">
+<div id="confirmationPopup" >
     <div class="confirmation-content">
         <h2>Confirmation</h2>
         <p>Are you sure you want redeem your point</p>
@@ -153,23 +158,6 @@
     });
 </script>
 <script>
-    // $(document).ready(function() {
-    //     $('.redirectBtn').click(function(e) {
-    //         e.preventDefault(); // Prevent the default redirect behavior
-
-    //         // Display the confirmation popup
-    //         if (confirm("Are you sure you want to redirect?")) {
-    //             // If user clicks 'OK' in the confirmation popup, perform the redirect
-    //           var href = $(this).attr('href');
-    //           //alert(href);
-    //           window.location.href = href;
-    //         }
-    //         else
-    //         {
-    //             return false;
-    //         }
-    //     });
-    // });
     $(function() {
         var href ="";
         $('.redirectBtn').click(function(e) {
@@ -193,5 +181,19 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function() {
+      <?php if (isset($_SESSION['error']) OR isset($_SESSION['success'])): ?>
+        $(window).on('load', function() {
+          $('.popup-container').show();
+        });
+        <?php //unset($_SESSION['success']); ?>
+      <?php endif; ?>
+      
+      $('.close-button').click(function() {
+        $('.popup-container').fadeOut(); 
+      });
+    });
+  </script>
 </body>
 </html>

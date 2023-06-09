@@ -58,7 +58,7 @@
               <div class="col-12 winner-content">
                   <div class="card winner-wrap">
                       <div class="card-header">
-                          <div>Rank</div>
+                          <div>SL</div>
                           <div>Name</div>
                           <div>Prize</div>
                       </div>
@@ -68,7 +68,7 @@
                         if(!empty($winner))
                         { 
                            
-                            foreach($winner as $data){
+                            foreach($winner as $key => $data){
                                
                                 switch ($data['prize']) {
                                     case 1:
@@ -84,8 +84,8 @@
                                 
                         ?>
                               <div class="winnerdetails">
-                                  <div>01</div>
-                                  <div><?php echo $data['name'] ?></div>
+                                  <div><?php echo ++$key;?></div>
+                                  <div><?php echo  $this->encryption->decrypt($data['name']); ?></div>
                                   
                                   <div><img src="<?php echo base_url().$imppath ?>"></div>
                               </div>

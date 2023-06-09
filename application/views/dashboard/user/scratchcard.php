@@ -37,7 +37,10 @@
 
                         $attributes = array('id' => 'myform','class' => 'form');
                         echo form_open('dashboard/claimPrize',$attributes); ?>
-                <div class="congrats"><img src="<?php echo base_url();?>assets/frontend/images/congrates-text.png" alt=""></div>
+                <div class="congrats">
+                    <!--<img src="<?php echo base_url();?>assets/frontend/images/congrates-text.png" alt="">-->
+                    <span class="congrates">CONGRATES</span>
+                </div>
                 <h2>You've won</h2>
                 <h1><?php echo $point->point ?></h1>
                 <h2>Points</h2>

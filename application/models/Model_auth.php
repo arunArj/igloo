@@ -13,6 +13,7 @@ class Model_auth extends CI_Model
 	public function check_username($username) 
 	{
 		if($username) {
+	
 			$sql = 'SELECT * FROM `users` WHERE username = ?';
 			$query = $this->db->query($sql, array($username));
 			$result = $query->num_rows();
@@ -27,10 +28,10 @@ class Model_auth extends CI_Model
 	*/
 	public function login($username, $password) {
 		if($username && $password) {
+	
 			$sql = "SELECT * FROM `users` WHERE username = ?";
 			$query = $this->db->query($sql, array($username));
-            // echo $password;
-            // exit();
+
 			if($query->num_rows() == 1) {
 				$result = $query->row_array();
 

@@ -9,7 +9,7 @@ class Model_winner extends CI_Model
 	
 	public function getWinnerDataByUser($id)
 	{
-		
+
 		$sql = "SELECT * FROM `winner` WHERE user_id = ?";
 		$query = $this->db->query($sql,array($id));
 	    return $query->result_array();
@@ -32,6 +32,7 @@ class Model_winner extends CI_Model
 	public function getWinnerCount($prize){
 
 	    if($prize) {
+	       
 			$sql = 'SELECT COUNT(id) as total FROM `winner` WHERE prize = ? ';
 			$query = $this->db->query($sql, array($prize));
 
@@ -58,13 +59,11 @@ class Model_winner extends CI_Model
 	    $query = $this->db->get();
 	    return $query->result_array();
 	    
-// 	    $sql = "SELECT * FROM `winner` WHERE status = '1'";
-// 		$query = $this->db->query($sql);
-// 		return $query->result_array();
 	}
 	
 	public function getAllWinnersByItem($item)
 	{
+	   
 	    $this->db->select('*');
 	    $this->db->from('winner');
 	    $this->db->join('consumer_record', 'winner.user_id = consumer_record.id', 'inner');
@@ -72,10 +71,7 @@ class Model_winner extends CI_Model
 	    $this->db->where('winner.prize',$item);
 	    $query = $this->db->get();
 	    return $query->result_array();
-	    
-// 	    $sql = "SELECT * FROM `winner` WHERE status = '1'";
-// 		$query = $this->db->query($sql);
-// 		return $query->result_array();
+
 	}
 }
 ?>

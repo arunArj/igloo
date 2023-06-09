@@ -8,7 +8,7 @@ class Dashboard extends CI_Controller {
 		parent::__construct();
         $this->load->library('user_agent');
         $this->load->library('session');
-       // $this->load->library('security');
+       $this->load->library('encryption');
        $this->load->helper('security');
         $this->load->library('CustomerAuth');
         $this->customerauth->not_logged_in();
@@ -106,7 +106,7 @@ class Dashboard extends CI_Controller {
         $id = $this->session->userdata('user_id');
        
         $data['profile'] = $this->model_common->get_consumer($id);
-
+      
         return $this->load->view('dashboard/user/profile',$data);
     }
     

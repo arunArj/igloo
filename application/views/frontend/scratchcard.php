@@ -15,6 +15,18 @@
 </head>
 
 <body class="site_registration">
+    
+    
+    <div class="popup-container">
+        <div class="popup-box">
+          
+          <p>You have successfully created your account, please check your registered email id for <strong>username</strong> and <strong>password</strong>.</p>
+          
+          <p>Please scratch you card and add your point</p>
+          <button class="close-button">Close</button>
+        </div>
+  </div>
+  
 <div class="wrapper">
   <div class="container-fluid">
     <header class="d-flex flex-wrap justify-content-center py-3 mb-4 headerlarge"> 
@@ -80,7 +92,10 @@
             <?php       
             $attributes = array('id' => 'myform','class' =>'form');
             echo form_open('scratchcard/registration',$attributes); ?>
-            <div class="congrats"><img src="<?php echo base_url() ?>assets/frontend/images/congrates-text.png" alt=""></div>
+                <div class="congrats">
+                    <!--<img src="<?php echo base_url() ?>assets/frontend/images/congrates-text.png" alt="">-->
+                    <span class="congrats">CONGRATS</span>
+                </div>
                 <h2>You've won</h2>
                 <h1><?php echo $point ?></h1>
                 <input type="hidden" id="cardPoint" name="cardPoint" value="<?php echo $point ?>">
@@ -131,5 +146,15 @@
     
 });
 </script>
+<script>
+    $(document).ready(function() {
+      $('.popup-container').fadeIn(); // Show the popup container
+      
+      // Close the popup when the close button is clicked
+      $('.close-button').click(function() {
+        $('.popup-container').fadeOut(); // Hide the popup container
+      });
+    });
+  </script>
 </body>
 </html>

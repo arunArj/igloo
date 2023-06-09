@@ -10,13 +10,16 @@ class Index extends CI_Controller {
         $this->load->library('session');
         $this->load->library('SendMail');
         $this->load->helper('string');
-        $this->load->model(['model_common','model_ip_block','model_winner']);	
+        $this->load->model(['model_common','model_ip_block','model_winner','model_consumer_auth','model_oman']);
+        $this->load->library('encryption');
+        $this->load->library('CustomHashing');
     	$this->load->helper('security');
 	}
 	public function index()
 	{
-	    
+
 	   $this->load->view('frontend/country');
+	   
 	}
 	public function home()
 	{
@@ -27,62 +30,69 @@ class Index extends CI_Controller {
 	{
 	   $this->load->view('frontend/registration');
 	}
-	public function registration_submit($id)
+	public function registration_submit()
 	{
 	    $this->session->unset_userdata('error');
         $this->session->unset_userdata('success'); 
         $ip = $this->input->ip_address();
-
+        
         //get current time
         date_default_timezone_set('Asia/Kolkata');
         $now = date('Y-m-d H:i:s');
-
+        
         //check for block
         $check=$this->model_ip_block->check_for_blockedip($ip);
         if($check== true){
 			$this->session->set_flashdata('error', 'Too many failed attempts occured !! please try after sometime');
                 redirect('index/registration', 'refresh');
 		}
+		
         $code = $this->input->post('code');
         // validate code      
         $codeCheck = $this->model_common->codeCheck($code);
+        
         if ($codeCheck == true) {
            // check code alreay registerd
+           
            $codeRegisterd = $this->model_common->codeRegisterd($code);
+           
            if ($codeRegisterd == true) 
            {
+               
                 $this->block_ip($ip);
                 $this->session->set_flashdata('error', 'This code already registerd');
                 redirect('index/registration', 'refresh');               
            }
            else
            {
+               
              $code_point = $this->model_common->getPoint($code);
              
            }
         }
         else
         {   
+            
             $this->block_ip($ip);        
             $this->session->set_flashdata('error', 'Invalid Code');
             redirect('index/registration', 'refresh');           
         }
-
+            
         $this->form_validation->set_rules('code', 'Code', 'trim|required');
-		$this->form_validation->set_rules('name', 'Name', 'trim|required');
+		$this->form_validation->set_rules('fname', 'First Name', 'trim|required');
+		$this->form_validation->set_rules('lname', 'Last Name', 'trim|required');
 		$this->form_validation->set_rules('country', 'Country', 'trim|required');
-        $this->form_validation->set_rules('national_id', 'National ID Number', 'trim|required');
 		$this->form_validation->set_rules('phone', 'Mobile Number', 'trim|required');
-        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email|is_unique[consumer_record.email]',array(
+        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email',array(
                 'required'      => 'You have not provided %s.',
-                'is_unique'     => 'It appears that you are already a registered user. Kindly proceed to log in and update your points.'
+              
         ));
         
        
-
+        
         $this->form_validation->set_error_delimiters('<div class="server-error">', '</div>');
         $this->form_validation->set_message('required', 'Enter %s');
-        
+               
         
         //validation of form
         if ($this->form_validation->run() == TRUE) {
@@ -98,10 +108,12 @@ class Index extends CI_Controller {
             {
                     $agent = 'Desktop';
             }
-
+            
+            $name = $this->input->post('fname')." ". $this->input->post('lname');
+            
         //push to session 
             $data = array(
-                'name' => $this->input->post('name'),
+                'name' => $name,
                 'country' => $this->input->post('country'),
                 'national_id' => $this->input->post('national_id'),
                 'mobile' => $this->input->post('phone'),
@@ -113,18 +125,19 @@ class Index extends CI_Controller {
                 'device' => $agent,
             );
             
-            $data = $this->security->xss_clean($data); 
+            $data = $this->security->xss_clean($data);
             $this->session->set_userdata($data);
             
             //generate and sent otp
             $six_digit_random_number = random_int(100000, 999999);
             $otpData = array(
-                'email' => $data['email'],
+                'email' => $this->customhashing->hashData($data['email']),
                 'otp' => $six_digit_random_number,
                 'time'    => $now
             );
-        
+            
             $insert_code = $this->model_common->addOtp($otpData);
+            
             
             $emailStatus = $this->sendmail->send_registration_email($data['name'],$data['email'],$six_digit_random_number);
             
@@ -186,7 +199,7 @@ class Index extends CI_Controller {
                 }
                 //generate user passord
                 $password = substr(str_shuffle('0123456789ABCDEFGHJKLMNPQRSTUVWXYZ'),1,8);
-                //$passwordEncripted = password_hash($password, PASSWORD_DEFAULT);
+                
                 
                 $insertStatus = $this->insertUSer($password);
                 
@@ -219,15 +232,19 @@ class Index extends CI_Controller {
         {
             $agent = 'Desktop';
         }
+        
+        $hashkey = $this->customhashing->hashData($this->session->userdata('email'));
             $data = array(
-                'name' => $this->session->userdata('name'),
+                'name' => $this->encryption->encrypt($this->session->userdata('name')),
                 'country' =>$this->session->userdata('country'),
-                'national_id' => $this->session->userdata('national_id'),
-                'mobile' =>$this->session->userdata('mobile'),
-                'email' => $this->session->userdata('email'),
+                'national_id' => $this->encryption->encrypt($this->session->userdata('national_id')),
+                'mobile' =>$this->encryption->encrypt($this->session->userdata('mobile')),
+                'email' => $this->encryption->encrypt($this->session->userdata('email')),
                 'language' =>$this->session->userdata('language'),
                 'password' =>password_hash($password, PASSWORD_DEFAULT),
+                'hash_key' => $hashkey
             );
+
         $this->db->trans_begin();
         $user = $this->model_common->create($data);
         $point_data = array(
@@ -295,13 +312,14 @@ class Index extends CI_Controller {
 
         // validate code
         $codeCheck = $this->model_common->codeCheck($code);
-        // echo $this->db->last_query();
-        // echo $codeCheck;
-        // exit();
+        
         if ($codeCheck == true) {
            // check code alreay registerd
            $codeRegisterd = $this->model_common->codeRegisterd($code);
-           if ($codeRegisterd == true) 
+           $codeRegisterd_oman = $this->model_oman->codeRegisterd($code);
+
+
+           if ($codeRegisterd == true || $codeRegisterd_oman) 
            {
                 $this->block_ip($ip);
                 $response['success'] = false;
@@ -402,5 +420,33 @@ class Index extends CI_Controller {
          $this->session->set_flashdata('success', 'otp is sent to your email');   
         $this->session->set_userdata('timer', date('Y-m-d H:i:s'));
         redirect('index/otp');
+    }
+    public function check_email()
+    {
+        $response = array(
+            'csrfName' => $this->security->get_csrf_token_name(),
+            'csrfHash' => $this->security->get_csrf_hash()
+        );
+
+        $email = $this->input->post('email');
+        $email = $this->security->xss_clean($email);
+        if(!$email){
+            $response['success'] = false;
+            $response['messages'] = 'please provide an email id!!';
+            echo json_encode($response);
+            exit();
+        }
+        $user = $this->model_consumer_auth->check_username($email);
+
+        if(!$user){
+            $response['success'] = false;
+            $response['messages'] = 'user not found';
+            echo json_encode($response);
+            exit();
+        }
+          $response['success'] = true;
+            $response['messages'] = 'It appears that you are already a registered user. Kindly proceed to log in and update your points.';
+            echo json_encode($response);
+
     }
 }

@@ -15,7 +15,7 @@ class Scratchcard extends CI_Controller {
 	public function index()
 	{
 	   $data['point'] = $this->session->userdata('point');
-	   //$data['point'] = 100;
+	  
 	    $code = $this->session->userdata('code');
 	    $data['code'] = $code;
 	   
@@ -52,7 +52,7 @@ class Scratchcard extends CI_Controller {
             $data = array(
     	        'status' => 1
     	    );
-    	    
+    	   
     	    $status =  $this->model_points->update($code,$data);
     	    if($status == true)
     	    {

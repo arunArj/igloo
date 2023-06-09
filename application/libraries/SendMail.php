@@ -229,4 +229,73 @@ class SendMail
              return false;
         } 
     }
+    public function welcome_email_oman($name,$email)
+    {
+        
+        $message ='<!DOCTYPE html>
+            <html>
+            <head>
+                <title>The fun has started with Igloo and Quanta</title>
+            </head>
+            <body>
+                <div style="background-color: #f2f2f2; padding: 20px; text-align: center;">
+                    <h2 style="color: #333;">The fun has started with Igloo and Quanta ☀️</h2>
+                    <h3 style="color: #333;">Dear '.$name.',</h3>
+                    <h3 style="color: #333;">Congratulations!</h3>
+                    <h3 style="color: #333;">You have been successfuly registerd</h3>
+                </div>
+            </body>
+            </html>';
+        $this->ci->email->set_mailtype("html");
+        //$this->ci->email->set_header('Content-Type', 'text/html');
+       // $this->ci->email->from('info@kreataglobal.com', 'IglooQuanta');
+        $this->ci->email->from('noreply@example.com', 'No Reply');
+        $this->ci->email->to($email);
+        $this->ci->email->subject('Igloo & Quanta Scan for Fun 2023  – Email verification');
+        $this->ci->email->message($message);
+        
+        if ($this->ci->email->send()) {
+            return true;
+        } else {
+              
+             return false;
+        }
+        
+    }
+    public function send_registration_email_oman($name ,$mail,$otp)
+    {
+        
+        $message ='<!DOCTYPE html>
+            <html>
+            <head>
+                <title>The fun has started with Igloo and Quanta</title>
+            </head>
+            <body>
+                <div style="background-color: #f2f2f2; padding: 20px; text-align: center;">
+                    <h2 style="color: #333;">The fun has started with Igloo and Quanta ☀️</h2>
+                    <h4 style="color: #333;">OTP verification</h4>
+                    <p style="font-size: 16px;">Dear '.$name.',</p>
+                    <p style="font-size: 16px;">Your One-Time Password (OTP) for Scan For Fun: '. $otp.'</p>
+                    <p style="font-size: 16px;">Please use this One-Time Password (OTP) to verify your account.</p>
+                </div>
+            </body>
+            </html>';
+        $this->ci->email->set_mailtype("html");
+        //$this->ci->email->set_header('Content-Type', 'text/html');
+       // $this->ci->email->from('info@kreataglobal.com', 'IglooQuanta');
+        $this->ci->email->from('noreply@example.com', 'No Reply');
+        $this->ci->email->to($mail);
+        $this->ci->email->subject('Igloo & Quanta Scan for Fun 2023  – Email verification');
+        $this->ci->email->message($message);
+        
+        if ($this->ci->email->send()) {
+            // Email sent successfully
+            return true;
+        } else {
+              //$error_message = $this->ci->email->print_debugger();
+             //echo $error_message;
+             return false;
+        }
+        
+    }
 }

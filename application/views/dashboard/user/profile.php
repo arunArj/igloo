@@ -56,7 +56,7 @@
                         <div class="card-body">
                             <div class="row pb-3">
                         <div class="col-lg-4 col-12 subTitle">Full Name:</div>
-                        <div class="col-lg-8 col-12"><?php echo $profile->name;?></div>
+                        <div class="col-lg-8 col-12"><?php echo $this->encryption->decrypt($profile->name);?></div>
                     </div>
                     <div class="row pb-3">
                         <div class="col-lg-4 col-12 subTitle">Country:</div>
@@ -64,15 +64,15 @@
                     </div>
                     <div class="row pb-3">
                         <div class="col-lg-4 col-12 subTitle">National ID Number:</div>
-                        <div class="col-lg-8 col-12"><?php echo $profile->national_id;?></div>
+                        <div class="col-lg-8 col-12"><?php echo $this->encryption->decrypt($profile->national_id);?></div>
                     </div>
                     <div class="row pb-3">
                         <div class="col-lg-4 col-12 subTitle">Email ID:</div>
-                        <div class="col-lg-8 col-12"><?php echo $profile->email;?></div>
+                        <div class="col-lg-8 col-12"><?php echo $this->encryption->decrypt($profile->email);?></div>
                     </div>
                     <div class="row pb-3">
                         <div class="col-lg-4 col-12 subTitle">Phone Number</div>
-                        <div class="col-lg-8 col-12"><?php echo $profile->mobile;?></div>
+                        <div class="col-lg-8 col-12"><?php echo $this->encryption->decrypt($profile->mobile)    ;?></div>
                     </div>
                         </div>
                     </div>

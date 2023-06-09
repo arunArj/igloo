@@ -29,6 +29,7 @@ class Model_registration extends CI_Model
 	}
 		
 	public function totalPointsByUser($id){
+ 
 	    $sql = 'SELECT SUM(p.point) AS total_points FROM consumer_record u JOIN point_table p ON u.id = p.user_id WHERE u.id = ? AND p.status = 1';
 	    $query = $this->db->query($sql,array($id));
 	    $result = $query->row();
@@ -39,6 +40,7 @@ class Model_registration extends CI_Model
 	
 	public function getUsers($country)
 	{
+
 		if($country){
 		    $sql = "SELECT * FROM `consumer_record` where country = ?";
 		    $query = $this->db->query($sql,array($country));
@@ -58,6 +60,7 @@ class Model_registration extends CI_Model
     
     function getUserCodes($id)
     {
+
         $this->db->select('*');
         $this->db->from('consumer_record');
         $this->db->join('point_table', 'point_table.user_id = consumer_record.id', 'left');
